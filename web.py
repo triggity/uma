@@ -1,4 +1,5 @@
 import flask
+from flask import request
 import pymongo
 import json
 # from flask.ext.pymongo import PyMongo
@@ -19,17 +20,32 @@ def encode(items):
     return json.dumps( items, default=json_util.default)
 
 
-@app.route("/restaurants")
+@app.route("/restaurants", methods=["GET"])
 def all_restaurants():
     restaurants = mongo.test.restaurants.find()
     items = [x for x in restaurants]
     return encode(items)
-    #return json.dumps( items, default=json_util.default)
-    # return encoder.encode(online_users)
 
-@app.route("/restaurants/<id>")
+@app.route("/restaurants", methods=["POST"])
+def add_restaurant():
+    data = request.get_json()
+    if not data.get('restaurant_id', ""):
+        print "ASDFASDFASDFA"
+        next_id = get_next_id()
+        print next_id
+        data['restaurant_id'] = next_id
+    item = mongo.test.restaurants.insert(data)
+    return encode(data['restaurant_id'])
+
+def get_next_id():
+    lst = mongo.test.restaurants.find().sort([("restaurant_id",-1)])
+    item = lst.next()
+    cur_id = item['restaurant_id']
+    return int(cur_id) + 1
+
+@app.route("/restaurants/<id>", methods=["GET"])
 def get_restaurant(id):
-    restaurant = mongo.test.restaurants.find_one({ "_id": ObjectId(id) })
+    restaurant = mongo.test.restaurants.find_one({ "restaurant_id": id })
     print restaurant
     return encode(restaurant)
     #return json.dumps( restaurant, default=json_util.default)
