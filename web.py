@@ -56,6 +56,11 @@ def put_restaurant(id):
     print restaurant
     return encode(restaurant)
 
+@app.route("/restaurants/<id>", methods=["DELETE"])
+def delete_restaurant(id):
+    restaurant = mongo.test.restaurants.remove({ "restaurant_id": id })
+    print restaurant
+    return encode(restaurant)
 if __name__ == "__main__":
     print "ASDFASDFASFD"
     app.run(debug=True)
