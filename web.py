@@ -48,8 +48,13 @@ def get_restaurant(id):
     restaurant = mongo.test.restaurants.find_one({ "restaurant_id": id })
     print restaurant
     return encode(restaurant)
-    #return json.dumps( restaurant, default=json_util.default)
-    # return encoder.encode(online_users)
+
+@app.route("/restaurants/<id>", methods=["PUT"])
+def put_restaurant(id):
+    data = request.get_json()
+    restaurant = mongo.test.restaurants.update({ "restaurant_id": id }, data)
+    print restaurant
+    return encode(restaurant)
 
 if __name__ == "__main__":
     print "ASDFASDFASFD"
