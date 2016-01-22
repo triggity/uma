@@ -1,3 +1,5 @@
+import os
+
 import flask
 from flask import request
 import pymongo
@@ -12,8 +14,10 @@ from bson import json_util, ObjectId
 #            return str(o)
 #        return json.JSONEncoder.default(self, o)
 
+mongo_location = os.environ.get("MONGO_LOCATION")
+PORT = int(os.environ.get("PORT", 8086)  )
 app = flask.Flask(__name__)
-mongo = pymongo.MongoClient("172.17.0.2", 27017)
+mongo = pymongo.MongoClient(mongo_location, 27017)
 #encoder = JSONEncoder()
 
 def encode(items):
@@ -62,4 +66,4 @@ def delete_restaurant(id):
     return encode(restaurant)
 if __name__ == "__main__":
     print "ASDFASDFASFD"
-    app.run(debug=True, port=8086)
+    app.run(debug=True, port=PORT, host="0.0.0.0")

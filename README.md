@@ -13,6 +13,8 @@ Build
 * install python dependencies (preferrably in a virtualenv)
   ``` pip install -r requirements.txt ```
 
-* 
+* make datasource
+* make run-web
+
 
 
